@@ -1,0 +1,50 @@
+{
+  "name": "nuxtjs-multiroom-chat",
+  "version": "1.0.0",
+  "description": "A simple multiroom chat built with Nuxt.js",
+  "author": "Alexey Soloviev",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "build": "nuxt build",
+    "start": "cross-env NODE_ENV=production node server/index.js",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
+  },
+  "_moduleAliases": {
+    "@config": "server/config/",
+    "@loaders": "server/loaders",
+    "@logger": "server/loaders/logger",
+    "@models": "server/models/",
+    "@root": ".",
+    "@services": "server/services/",
+    "@utils": "server/utils/"
+  },
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "@nuxtjs/dotenv": "~1.4.0",
+    "body-parser": "~1.19.0",
+    "bootstrap": "~4.1.3",
+    "bootstrap-vue": "~2.0.0",
+    "compression": "~1.7.4",
+    "cors": "^2.8.5",
+    "cross-env": "~5.2.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.16.4",
+    "helmet": "^3.22.0",
+    "module-alias": "~2.2.2",
+    "moment": "~2.26.0",
+    "nuxt": "~2.0.0",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config": "^2.0.0",
+    "@nuxtjs/eslint-module": "^1.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-nuxt": ">=0.4.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "nodemon": "^1.18.9"
+  }
+}
