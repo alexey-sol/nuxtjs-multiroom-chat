@@ -39,12 +39,11 @@ module.exports = {
         "import/prefer-default-export": 0,
         "import/order": 0,
         "indent": ["error", 4, { "SwitchCase": 1 }],
+        "lines-between-class-members": ["error", "always", { exceptAfterSingleLine: true }],
         "no-confusing-arrow": 0,
         "no-restricted-syntax": 0,
         "no-use-before-define": 0,
         "nuxt/no-cjs-in-config": 0,
-        "quotes": [2, "double"],
-        "lines-between-class-members": ["error", "always", { exceptAfterSingleLine: true }],
         "max-len": ["error", { "code": 90 }],
         "no-console": 0,
         "no-else-return": 0,
@@ -52,7 +51,9 @@ module.exports = {
         "no-use-before-define": ["error", { "functions": false, "classes": true }],
         "object-curly-spacing": [2, "always"],
         "operator-linebreak": 0,
+        "quotes": [2, "double"],
         "semi": [2, "always", { "omitLastInOneLineBlock": true }],
-        "space-before-function-paren": ["error", "always"]
+        "space-before-function-paren": ["error", "always"],
+        "vue/html-indent": ["error", 4]
     }
 };

@@ -1,4 +1,5 @@
 const express = require("express");
+const http = require("http");
 
 const { SIGTERM } = require("@utils/const/signals");
 const ProcessManager = require("@utils/helpers/ProcessManager");
@@ -9,12 +10,14 @@ startServer();
 
 async function startServer () {
     const app = express();
-    await loaders.init(app);
+    const server = http.createServer(app);
+
+    await loaders.init({ app, server });
 
     const { baseUrl, port } = require("@config/server");
     const { exit, nodeEnv } = new ProcessManager();
 
-    const server = app.listen(+port, (error) => (error)
+    server.listen(+port, (error) => (error)
         ? exit(error)
         : logSuccess({ baseUrl, nodeEnv })
     );

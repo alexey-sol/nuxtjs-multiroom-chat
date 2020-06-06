@@ -1,0 +1,59 @@
+@import "@/assets/styles/style.scss";
+
+.container {
+    display: grid;
+    box-sizing: border-box;
+    grid-template-areas:
+        "header"
+        "main";
+    grid-template-rows: repeat(2, auto);
+    grid-template-columns: auto;
+    max-width: 40rem;
+    margin-top: 10vh;
+    border: 1px solid $border-color--lighter;
+    border-radius: 0.4rem;
+    font-size: $font-size--small;
+    background-color: white;
+    overflow: hidden; // so that children can't break border-radius
+    -webkit-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.2);
+
+    .header {
+        grid-area: header;
+        display: flex;
+        box-sizing: border-box;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 0;
+        height: auto;
+        background-color: $color-primary;
+        color: $color-secondary;
+    }
+
+    .main {
+        grid-area: main;
+        box-sizing: border-box;
+        padding: 3rem;
+    }
+
+    form {
+        display: grid;
+        grid-auto-columns: auto;
+        row-gap: 1rem;
+
+        .form-item {
+            margin: 0;
+
+            label {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    }
+
+    button {
+        width: 100%;
+        margin-top: 1rem;
+    }
+}

@@ -2,22 +2,20 @@ const { Nuxt, Builder } = require("nuxt");
 const bodyParser = require("body-parser");
 const compression = require("compression");
 const cors = require("cors");
-const express = require("express");
 const helmet = require("helmet");
-const path = require("path");
 
+const { DEVELOPMENT } = require("@utils/const/nodeEnv");
+const ProcessManager = require("@utils/helpers/ProcessManager");
 const config = require("@root/nuxt.config.js");
 
-module.exports = async (options) => {
-    const { app } = options;
-
-    const root = process.cwd();
-    const publicDirPath = path.join(root, "public");
-
+module.exports = async ({ app }) => {
     const nuxt = new Nuxt(config);
     await nuxt.ready();
 
-    if (config.dev) {
+    const { nodeEnv } = new ProcessManager();
+    const isDevelopment = nodeEnv === DEVELOPMENT;
+
+    if (isDevelopment) {
         const builder = new Builder(nuxt);
         await builder.build();
     }
@@ -27,7 +25,6 @@ module.exports = async (options) => {
     app.use(helmet());
     app.use(bodyParser.json());
     app.use(compression());
-    app.use(express.static(publicDirPath));
 
     return app;
 };
