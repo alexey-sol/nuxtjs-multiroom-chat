@@ -1,25 +1,32 @@
+const User = require("./User");
+
 class Room {
     constructor (props = {}) {
         const {
             id,
-            name,
-            ownerId
+            name
         } = props;
 
         this.id = id;
         this.name = name;
-        this.ownerId = ownerId;
         this.createdAt = new Date();
         this.users = {};
     }
 
-    addUser (user = {}) {
-        const { id } = user;
-        this.users[id] = user;
+    createUser (user = {}) {
+        const { id, name } = user;
+
+        this.users[id] = new User({
+            id,
+            name
+        });
+
+        return id;
     }
 
     deleteUser (id) {
         delete this.users[id];
+        return id;
     }
 
     getUser (id) {

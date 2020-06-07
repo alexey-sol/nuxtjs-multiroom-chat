@@ -1,31 +1,44 @@
 const socketIo = require("socket.io");
 
+const RoomsList = require("@models/RoomsList");
+
+const roomsList = new RoomsList();
+
 const {
     CONNECTION,
+    JOIN,
     LEAVE,
     MESSAGE
 } = require("@utils/const/events/io");
-
-// import { onLeave, onMessage } from "@subscribers/io";
-// import chatApiPublisher from "@publishers/chatApiPublisher";
 
 module.exports = ({ server }) => {
     const io = socketIo(server);
 
     io.on(CONNECTION, (socket) => {
-        // const { groupId } = socket.handshake.query;
-        // const groupMessageEvent = `${MESSAGE}:${groupId}`;
+        socket.on("createRoom", (room, cb) => {
+            try {
+                const newRoom = roomsList.createRoom(room);
+                cb(null, newRoom);
+            } catch (error) {
+                const message = { message: error.message };
+                cb(message);
+            }
+        });
 
-        // socket.join(groupId);
+        socket.on("getRooms", (cb) => {
+            cb(null, roomsList.getRooms());
+        });
 
-        // chatApiPublisher.on(
-        //     groupMessageEvent,
-        //     (data) => onMessage(io, groupId, data)
-        // );
+        socket.on(JOIN, (props, cb) => {
+            const { roomId, userName } = props;
+            socket.join(roomId);
 
-        // chatApiPublisher.on(
-        //     LEAVE,
-        //     () => onLeave(socket, groupId)
-        // );
+            const roomToJoin = roomsList.getRoom(roomId);
+            roomToJoin.createUser({
+                name: userName
+            });
+
+            cb(null, roomToJoin);
+        });
     });
-}
+};

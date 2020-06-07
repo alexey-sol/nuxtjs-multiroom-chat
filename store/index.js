@@ -1,8 +1,9 @@
 export const state = () => ({
+    currentRoom: {},
     currentUser: {},
-    messages: [],
-    rooms: [],
-    users: []
+    messages: {},
+    rooms: {},
+    users: {}
 });
 
 export const mutations = {
@@ -12,7 +13,19 @@ export const mutations = {
 
     addMessage (state, message) {
         state.messages = [...state.messages, message];
-        // NOTE: for a room. If user is out, there're no messages (clear them)
+    },
+
+    addRoom (state, newRoom) {
+        const { id } = newRoom;
+
+        state.rooms = {
+            ...state.rooms,
+            [id]: newRoom
+        };
+    },
+
+    updateRooms (state, rooms) {
+        state.rooms = rooms;
     },
 
     updateUsers (state, users) {
@@ -20,9 +33,10 @@ export const mutations = {
     },
 
     clearData (state) {
+        state.currentRoom = {};
         state.currentUser = {};
-        state.messages = [];
-        state.rooms = [];
-        state.users = [];
+        state.messages = {};
+        state.rooms = {};
+        state.users = {};
     }
 };
