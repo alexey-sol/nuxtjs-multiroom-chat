@@ -8,6 +8,7 @@
             "@models/*": ["./server/models/*"],
             "@root/*": ["./*"],
             "@services/*": ["./server/services/*"],
+            "@subscribers/*": ["./server/subscribers/*"],
             "@utils/*": ["./server/utils/*"]
         }
     },

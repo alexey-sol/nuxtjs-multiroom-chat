@@ -53,7 +53,7 @@ export default {
             this.removeUser(id);
         });
 
-        listener.subscribe("message", (message) => {
+        listener.subscribe("messageSent", (message) => {
             this.addMessage(message);
         });
     },
@@ -98,7 +98,7 @@ export default {
         sendMessage () {
             const { currentUser, message } = this;
 
-            this.$socket.emit("message", {
+            this.$socket.emit("sendMessage", {
                 authorName: currentUser.name,
                 roomId: currentUser.roomId,
                 text: message
