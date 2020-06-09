@@ -16,7 +16,7 @@ module.exports = {
     loading: { color: "#fff" },
 
     plugins: [
-        { src: "@/plugins/io.client.js", ssr: false },
+        { src: "@/plugins/socket.client.js", ssr: false },
         { src: "@/plugins/element-ui.js" }
     ],
 

@@ -1,11 +1,11 @@
 <template>
     <Container class="container">
-        <Header class="header">
+        <header class="header">
             Nuxt.js Multiroom Chat
-        </Header>
+        </header>
 
-        <Main class="main">
-            <Form @submit.prevent="joinChat">
+        <main class="main">
+            <Form @submit.prevent="signIn">
                 <FormItem class="form-item">
                     <label>
                         <span>
@@ -14,9 +14,9 @@
 
                         <Input
                             v-model="userName"
-                            maxlength="40"
+                            maxlength="30"
                             placeholder="Name"
-                            @keypress.enter.exact.native="joinChat()"
+                            @keypress.enter.exact.native="signIn"
                         />
                     </label>
                 </FormItem>
@@ -29,9 +29,9 @@
 
                         <Input
                             v-model="chatName"
-                            maxlength="40"
+                            maxlength="30"
                             placeholder="Chat name"
-                            @keypress.enter.exact.native="createChat()"
+                            @keypress.enter.exact.native="createChat"
                         />
                     </label>
 
@@ -66,13 +66,13 @@
                     <Button
                         class="button"
                         type="primary"
-                        @click="joinChat"
+                        @click="signIn"
                     >
                         Join
                     </Button>
                 </FormItem>
             </Form>
-        </Main>
+        </main>
     </Container>
 </template>
 

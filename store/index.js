@@ -1,42 +1,53 @@
 export const state = () => ({
     currentRoom: {},
     currentUser: {},
-    messages: {},
-    rooms: {},
-    users: {}
+    messages: [],
+    rooms: [],
+    users: []
 });
 
 export const mutations = {
-    setCurrentUser (state, user) {
-        state.currentUser = user;
-    },
-
     addMessage (state, message) {
         state.messages = [...state.messages, message];
     },
 
-    addRoom (state, newRoom) {
-        const { id } = newRoom;
-
-        state.rooms = {
-            ...state.rooms,
-            [id]: newRoom
-        };
+    addRoom (state, room) {
+        state.rooms = [...state.rooms, room];
     },
 
-    updateRooms (state, rooms) {
+    addUser (state, user) {
+        state.users = [...state.users, user];
+    },
+
+    removeUser (state, userId) {
+        state.users = state.users.filter(user => user.id !== userId);
+    },
+
+    setCurrentRoom (state, room) {
+        state.currentRoom = room;
+    },
+
+    setCurrentUser (state, user) {
+        state.currentUser = user;
+    },
+
+    setMessages (state, messages) {
+        state.messages = messages;
+    },
+
+    setRooms (state, rooms) {
         state.rooms = rooms;
     },
 
-    updateUsers (state, users) {
+    setUsers (state, users) {
         state.users = users;
     },
 
-    clearData (state) {
+    clearState (state) {
         state.currentRoom = {};
         state.currentUser = {};
-        state.messages = {};
-        state.rooms = {};
-        state.users = {};
+        state.messages = [];
+        state.rooms = [];
+        state.users = [];
     }
 };

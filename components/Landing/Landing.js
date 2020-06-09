@@ -3,9 +3,7 @@ import {
     Container,
     Form,
     FormItem,
-    Header,
     Input,
-    Main,
     Message,
     Option,
     Select
@@ -21,10 +19,8 @@ export default {
         Container,
         Form,
         FormItem,
-        Header,
         Input,
         Landing,
-        Main,
         Message,
         Option,
         Select
@@ -41,7 +37,8 @@ export default {
     methods: {
         ...mapMutations([
             "addRoom",
-            "updateRooms"
+            "setCurrentUser",
+            "setRooms"
         ]),
 
         createChat () {
@@ -67,35 +64,36 @@ export default {
             });
         },
 
-        joinChat () {
+        signIn () {
             const { selectedRoomId, userName } = this;
 
             if (!userName) {
-                return this.$message.error("It'd be nice to know your name");
+                return this.$message.error("Please type in your name");
             }
 
             if (!selectedRoomId) {
                 return this.$message.error("Please choose a chat you would like to join");
             }
 
-            this.$socket.emit("join", {
-                roomId: selectedRoomId,
-                userName
-            }, (error, joinedRoom) => {
+            this.$socket.emit("signIn", {
+                name: userName,
+                roomId: selectedRoomId
+            }, (error, user) => {
                 if (error) {
                     return this.$message.error(error.message);
                 }
 
+                this.setCurrentUser(user);
+
                 this.$router.push({
-                    path: `/chat/${joinedRoom.id}`
+                    path: `/chat/${selectedRoomId}`
                 });
             });
         }
     },
 
     computed: mapState({
-        roomOptions: ({ rooms }) => Object
-            .values(rooms)
+        roomOptions: ({ rooms }) => rooms
             .map(({ id, name }) => ({
                 label: name,
                 value: id
@@ -104,12 +102,18 @@ export default {
     }),
 
     mounted () {
+        const { listener } = this.sockets;
+
         this.$socket.emit("getRooms", (error, rooms) => {
             if (error) {
                 return this.$message.error(error.message);
             }
 
-            this.updateRooms(rooms);
+            this.setRooms(rooms);
+        });
+
+        listener.subscribe("roomCreated", (room) => {
+            this.addRoom(room);
         });
     }
 };

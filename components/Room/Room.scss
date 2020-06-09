@@ -1,0 +1,98 @@
+@import "@/assets/styles/style.scss";
+
+.container {
+    display: grid;
+    box-sizing: border-box;
+    grid-template-rows: 4rem auto;
+    grid-template-columns: auto;
+    max-width: 90rem;
+    margin-top: 10vh;
+    border-radius: 0.5rem;
+    font-size: $font-size--small;
+    background-color: $color-secondary;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.2);
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 2rem;
+        background-color: $color-primary;
+        color: $color-secondary;
+
+        .button-leave {
+            border-color: $button-leave--hover;
+            border-radius: 0;
+            
+            &:hover {
+                background-color: $button-leave--hover;
+                color: $color-primary;
+            }
+        }
+    }
+
+    .main {
+        display: grid;
+        box-sizing: border-box;
+        grid-template-areas:
+            "users chat"
+            "message-field message-field";
+        grid-template-rows: minmax(20rem, 40rem) 4rem;
+        grid-template-columns: 20rem 1fr;
+        row-gap: 2rem;
+        padding: 2rem;
+    }
+
+    .users {
+        grid-area: users;
+        box-sizing: border-box;
+        padding-right: 2rem;
+        border-right: 1px solid $border-color--lighter;
+
+        .users-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .users-list {
+            display: grid;
+            box-sizing: border-box;
+            grid-template-columns: 1fr;
+            row-gap: 0.5rem;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+
+            .user-item {
+                word-break: break-all;
+            }
+        }
+    }
+
+    .chat {
+        grid-area: chat;
+        box-sizing: border-box;
+        padding: 0 2rem;
+
+        .messages-list {
+            display: grid;
+            box-sizing: border-box;
+            grid-template-columns: 1fr;
+            row-gap: 0.5rem;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+
+            .message-item {
+                word-break: break-all;
+            }
+        }
+    }
+
+    .message-field {
+        grid-area: message-field;
+        display: flex;
+    }
+}
