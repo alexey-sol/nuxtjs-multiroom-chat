@@ -7,10 +7,6 @@ export const mutations = {
         state.items = [...state.items, user];
     },
 
-    clearUsers (state) {
-        state.items = [];
-    },
-
     removeUser (state, userId) {
         state.items = state.items.filter(user => user.id !== userId);
     },

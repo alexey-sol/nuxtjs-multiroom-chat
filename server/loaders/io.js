@@ -151,6 +151,18 @@ module.exports = ({ server }) => {
 
                 socket.broadcast.to(roomId).emit("message", userLeftMessage);
 
+                const remainingUsers = users.getItems();
+
+                if (remainingUsers.length === 0) {
+                    const { name } = rooms.getItem(roomId);
+                    rooms.removeItem(roomId);
+
+                    io.emit("roomRemoved", {
+                        id: roomId,
+                        name
+                    });
+                }
+
                 cb();
             }
         });

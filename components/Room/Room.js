@@ -73,12 +73,22 @@ export default {
             addUser: "users/addUser",
             removeUser: "users/removeUser",
             setCurrentRoom: "setCurrentRoom",
+            setCurrentUser: "setCurrentUser",
             setMessages: "messages/setMessages",
             setUsers: "users/setUsers"
         }),
 
+        clearState () {
+            this.setCurrentRoom({});
+            this.setCurrentUser({});
+            this.setMessages([]);
+            this.setUsers([]);
+        },
+
         leaveChat () {
             this.$socket.emit("leave", () => {
+                this.clearState();
+
                 this.$router.push({
                     path: "/"
                 });

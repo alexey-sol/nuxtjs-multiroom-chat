@@ -7,10 +7,6 @@ export const mutations = {
         state.items = [...state.items, message];
     },
 
-    clearMessages (state) {
-        state.items = [];
-    },
-
     setMessages (state, updatedMessages) {
         state.items = updatedMessages;
     }

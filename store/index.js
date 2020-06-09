@@ -4,14 +4,6 @@ export const state = () => ({
 });
 
 export const mutations = {
-    clearCurrentRoom (state) {
-        state.currentRoom = {};
-    },
-
-    clearCurrentUser (state) {
-        state.currentUser = {};
-    },
-
     setCurrentRoom (state, room) {
         state.currentRoom = room;
     },

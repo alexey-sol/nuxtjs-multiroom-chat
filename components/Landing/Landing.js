@@ -35,13 +35,9 @@ export default {
     },
 
     methods: {
-        // ...mapMutations([
-        //     "rooms/addRoom",
-        //     "setCurrentUser",
-        //     "rooms/setRooms"
-        // ]),
         ...mapMutations({
             addRoom: "rooms/addRoom",
+            removeRoom: "rooms/removeRoom",
             setCurrentUser: "setCurrentUser",
             setRooms: "rooms/setRooms"
         }),
@@ -60,12 +56,12 @@ export default {
                     return this.$message.error(error.message);
                 }
 
+                this.addRoom(newRoom);
+
                 this.$message({
                     message: "Created!",
                     type: "success"
                 });
-
-                this.addRoom(newRoom);
             });
         },
 
@@ -120,6 +116,15 @@ export default {
 
         listener.subscribe("roomCreated", (room) => {
             this.addRoom(room);
+        });
+
+        listener.subscribe("roomRemoved", ({ id, name }) => {
+            this.removeRoom(id);
+
+            this.$message({
+                message: `The room "${name}" has been removed since there's nobody left`,
+                type: "warning"
+            });
         });
     }
 };

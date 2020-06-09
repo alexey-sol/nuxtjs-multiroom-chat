@@ -7,8 +7,8 @@ export const mutations = {
         state.items = [...state.items, room];
     },
 
-    clearRooms (state) {
-        state.items = [];
+    removeRoom (state, roomId) {
+        state.items = state.items.filter(room => room.id !== roomId);
     },
 
     setRooms (state, updatedRooms) {
