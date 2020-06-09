@@ -35,11 +35,16 @@ export default {
     },
 
     methods: {
-        ...mapMutations([
-            "addRoom",
-            "setCurrentUser",
-            "setRooms"
-        ]),
+        // ...mapMutations([
+        //     "rooms/addRoom",
+        //     "setCurrentUser",
+        //     "rooms/setRooms"
+        // ]),
+        ...mapMutations({
+            addRoom: "rooms/addRoom",
+            setCurrentUser: "setCurrentUser",
+            setRooms: "rooms/setRooms"
+        }),
 
         createChat () {
             const { chatName } = this;
@@ -94,6 +99,7 @@ export default {
 
     computed: mapState({
         roomOptions: ({ rooms }) => rooms
+            .items
             .map(({ id, name }) => ({
                 label: name,
                 value: id

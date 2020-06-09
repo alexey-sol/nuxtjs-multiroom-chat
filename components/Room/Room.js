@@ -13,12 +13,12 @@ export default {
         Input
     },
 
-    computed: mapState([
-        "currentRoom",
-        "currentUser",
-        "messages",
-        "users"
-    ]),
+    computed: mapState({
+        currentRoom: (state) => state.currentRoom,
+        currentUser: (state) => state.currentUser,
+        messages: (state) => state.messages.items,
+        users: (state) => state.users.items
+    }),
 
     mounted () {
         const { listener } = this.sockets;
@@ -68,14 +68,14 @@ export default {
     // },
 
     methods: {
-        ...mapMutations([
-            "addMessage",
-            "addUser",
-            "removeUser",
-            "setCurrentRoom",
-            "setMessages",
-            "setUsers"
-        ]),
+        ...mapMutations({
+            addMessage: "messages/addMessage",
+            addUser: "users/addUser",
+            removeUser: "users/removeUser",
+            setCurrentRoom: "setCurrentRoom",
+            setMessages: "messages/setMessages",
+            setUsers: "users/setUsers"
+        }),
 
         leaveChat () {
             this.$socket.emit("leave", () => {

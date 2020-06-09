@@ -8,7 +8,7 @@ function validateUserProps (props, users) {
     let message = "";
 
     if (trimmedName.toLowerCase() === "system") {
-        message = "This name is forbidden";
+        message = "This name is reserved";
         return new ValidationError(message);
     }
 
