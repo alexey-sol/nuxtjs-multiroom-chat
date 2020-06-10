@@ -1,33 +1,50 @@
 const { MESSAGE_SENT, USER_JOINED } = require("@root/const/events/io");
+const { SYSTEM } = require("@root/const/reservedNames");
 const Message = require("@models/Message");
+const UnauthorizedError = require("@utils/errors/UnauthorizedError");
+const ValidationError = require("@utils/errors/ValidationError");
 const { messages, rooms, users } = require("@models/storages");
+const formatErrorForSocket = require("@utils/formatters/formatErrorForSocket");
 
-function onJoin (socket, currentUser, cb) {
-    const { roomId } = currentUser;
-    const room = rooms.getItem(roomId);
+function onJoin (socket, roomId, user, cb) {
+    try {
+        const { id } = user;
+        const room = rooms.getItem(roomId);
+        const userIsAuthed = Boolean(id);
 
-    socket.join(roomId);
+        if (!room) {
+            throw new ValidationError("No chat found");
+        }
 
-    const messagesWithWelcome = getAllMessagesForUser(currentUser);
+        if (!userIsAuthed) {
+            throw new UnauthorizedError();
+        }
 
-    const roomData = {
-        messages: messagesWithWelcome,
-        room,
-        users: users.getItems({ roomId })
-    };
+        socket.join(roomId);
 
-    reportUserJoined(socket, currentUser);
+        // let messagesWithWelcome = getMessagesWithWelcome(user);
 
-    cb(null, roomData);
+        const roomData = {
+            messages: getMessagesWithWelcome(user),
+            room,
+            users: users.getItems({ roomId })
+        };
+
+        reportUserJoined(socket, user);
+
+        cb(null, roomData);
+    } catch (error) {
+        cb(formatErrorForSocket(error));
+    }
 }
 
 module.exports = onJoin;
 
-function getAllMessagesForUser (user) {
+function getMessagesWithWelcome (user) {
     const { name, roomId } = user;
 
     const welcomeMessage = new Message({
-        authorName: "system",
+        authorName: SYSTEM,
         roomId,
         text: `Welcome, ${name}!`
     });
@@ -42,7 +59,7 @@ function reportUserJoined (socket, user) {
     const { name, roomId } = user;
 
     const userJoinedMessage = new Message({
-        authorName: "system", // TODO - to const
+        authorName: SYSTEM,
         roomId,
         text: `${name} has joined the chat`
     });

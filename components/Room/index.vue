@@ -1,5 +1,7 @@
 <template>
-    <Container class="container">
+    <Container
+        :class="['container', showSignIn ? 'collapsed' : '']"
+    >
         <header class="header">
             <div class="chat-name">
                 Chat name: {{ currentRoom.name }}
@@ -9,7 +11,7 @@
                 class="button-leave"
                 plain
                 type="primary"
-                @click="leaveChat"
+                @click="emitLeave"
             >
                 Leave chat
             </Button>
@@ -52,14 +54,20 @@
                     maxlength="99"
                     placeholder="Message"
                     show-word-limit
-                    @keypress.enter.exact.native="sendMessage"
+                    @keypress.enter.exact.native="emitSendMessage"
                 />
 
-                <Button @click="sendMessage">
+                <Button @click="emitSendMessage">
                     Send
                 </Button>
             </section>
         </main>
+
+        <SignInDialog
+            :handle-cancel="redirectToLanding"
+            :handle-submit="signIn"
+            :visible="showSignIn"
+        />
     </Container>
 </template>
 

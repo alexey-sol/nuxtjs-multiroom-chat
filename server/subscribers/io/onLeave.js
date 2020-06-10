@@ -4,6 +4,7 @@ const {
     USER_LEFT
 } = require("@root/const/events/io");
 
+const { SYSTEM } = require("@root/const/reservedNames");
 const Message = require("@models/Message");
 const { messages, rooms, users } = require("@models/storages");
 
@@ -46,7 +47,7 @@ function removeUserAndReport (socket, user) {
         .emit(USER_LEFT, id);
 
     const userLeftMessage = new Message({
-        authorName: "system",
+        authorName: SYSTEM,
         roomId,
         text: `${name} has left the chat`
     });

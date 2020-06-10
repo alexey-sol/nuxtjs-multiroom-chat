@@ -27,7 +27,7 @@ module.exports = ({ server }) => {
         socket.on(CREATE_ROOM, (roomProps, cb) => onCreateRoom(socket, roomProps, cb));
         socket.on(GET_ROOMS, onGetRooms);
         socket.on(SIGN_IN, (userProps, cb) => onSignIn(socket, userProps, cb));
-        socket.on(JOIN, (currentUser, cb) => onJoin(socket, currentUser, cb));
+        socket.on(JOIN, (roomId, user, cb) => onJoin(socket, roomId, user, cb));
         socket.on(SEND_MESSAGE, (messageProps) => onSendMessage(io, messageProps));
         socket.on(LEAVE, (cb) => onLeave(io, socket, cb));
         socket.on(DISCONNECT, () => onLeave(io, socket));

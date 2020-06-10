@@ -1,3 +1,4 @@
+const { SYSTEM } = require("@root/const/reservedNames");
 const ValidationError = require("@utils/errors/ValidationError");
 const nameIsUniqueIn = require("@utils/helpers/nameIsUniqueIn");
 
@@ -6,8 +7,9 @@ function validateUserProps (props, users) {
     const trimmedName = name.trim();
 
     let message = "";
+    const nameIsReserved = trimmedName.toLowerCase() === SYSTEM;
 
-    if (trimmedName.toLowerCase() === "system") {
+    if (nameIsReserved) {
         message = "This name is reserved";
         return new ValidationError(message);
     }

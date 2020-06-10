@@ -9,17 +9,21 @@ import {
     LEAVE,
     MESSAGE_SENT,
     SEND_MESSAGE,
+    SIGN_IN,
     USER_JOINED,
     USER_LEFT
 } from "@/const/events/io";
 
+import { UNAUTHORIZED_ERROR } from "@/const/errorNames";
+import SignInDialog from "@/components/SignInDialog";
 import { mapMutations, mapState } from "vuex";
 
 export default {
     components: {
         Button,
         Container,
-        Input
+        Input,
+        SignInDialog
     },
 
     computed: mapState({
@@ -30,51 +34,19 @@ export default {
     }),
 
     mounted () {
+        this.emitJoin();
+
         const { listener } = this.sockets;
-        const { id } = this.$route.params;
 
-        const shouldHaltVisitor = !this.currentUser.id;
-
-        if (shouldHaltVisitor) {
-            this.$message.error("Please sign in");
-            return this.$router.push({
-                path: "/"
-            });
-        }
-
-        // TODO: if no currentUser, show popup to sign up
-
-        // TODO: doc title is chat's name
-
-        this.$socket.emit(JOIN, this.currentUser, (error, roomData) => {
-            if (error) {
-                return this.$message.error(error.message);
-            }
-
-            const { room, messages, users } = roomData;
-
-            this.setCurrentRoom(room);
-            this.setMessages(messages);
-            this.setUsers(users);
-        });
-
-        listener.subscribe(USER_JOINED, (user) => {
-            this.addUser(user);
-        });
-
-        listener.subscribe(USER_LEFT, (id) => {
-            this.removeUser(id);
-        });
-
-        listener.subscribe(MESSAGE_SENT, (message) => {
-            console.log(message)
-            this.addMessage(message);
-        });
+        listener.subscribe(USER_JOINED, this.addUser);
+        listener.subscribe(USER_LEFT, this.removeUser);
+        listener.subscribe(MESSAGE_SENT, this.addMessage);
     },
 
     data () {
         return {
-            message: ""
+            message: "",
+            showSignIn: false
         };
     },
 
@@ -96,24 +68,110 @@ export default {
             this.setUsers([]);
         },
 
-        leaveChat () {
-            this.$socket.emit(LEAVE, () => {
-                this.clearState();
+        emitJoin () {
+            const { id } = this.$route.params;
 
-                this.$router.push({
-                    path: "/"
-                });
+            this.$socket.emit(
+                JOIN,
+                id,
+                this.currentUser,
+                this.handleJoinEvent
+            );
+        },
+
+        emitLeave () {
+            this.$socket.emit(
+                LEAVE,
+                this.handleLeaveEvent
+            );
+        },
+
+        emitSendMessage () {
+            const messageProps = {
+                authorName: this.currentUser.name,
+                roomId: this.currentUser.roomId,
+                text: this.message
+            };
+
+            this.$socket.emit(
+                SEND_MESSAGE,
+                messageProps
+            );
+        },
+
+        emitSignIn (userProps) {
+            this.$socket.emit(
+                SIGN_IN,
+                userProps,
+                this.handleSignInEvent
+            );
+        },
+
+        handleJoinEvent (error, roomData) {
+            if (error) {
+                return this.handleJoinError(error);
+            }
+
+            this.handleJoinSuccess(roomData);
+        },
+
+        handleJoinError (error) {
+            const isUnauthorized = error.name === UNAUTHORIZED_ERROR;
+
+            if (isUnauthorized) {
+                this.showSignIn = true;
+            } else {
+                this.$message.error(error.message);
+                this.redirectToLanding();
+            }
+        },
+
+        handleJoinSuccess (roomData) {
+            const {
+                messages,
+                room,
+                users
+            } = roomData;
+
+            this.setCurrentRoom(room);
+            this.setMessages(messages);
+            this.setUsers(users);
+        },
+
+        handleLeaveEvent () {
+            this.clearState();
+            this.redirectToLanding();
+        },
+
+        handleSignInEvent (error, user) {
+            if (error) {
+                return this.$message.error(error.message);
+            }
+
+            this.setCurrentUser(user);
+            this.showSignIn = false;
+            this.emitJoin();
+        },
+
+        redirectToLanding () {
+            this.$router.push({
+                path: "/"
             });
         },
 
-        sendMessage () {
-            const { currentUser, message } = this;
+        signIn (partialProps = {}) {
+            if (!partialProps.name) {
+                return this.$message.error("Please type in your name");
+            }
 
-            this.$socket.emit(SEND_MESSAGE, {
-                authorName: currentUser.name,
-                roomId: currentUser.roomId,
-                text: message
-            });
+            const roomId = this.$route.params.id;
+
+            const userProps = {
+                ...partialProps,
+                roomId
+            };
+
+            this.emitSignIn(userProps);
         }
     }
 };

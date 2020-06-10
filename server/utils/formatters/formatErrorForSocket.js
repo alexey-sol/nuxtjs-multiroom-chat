@@ -1,5 +1,11 @@
-function formatErrorForSocket (error = {}) {
-    return { message: error.message };
+function formatErrorForSocket ({
+    message,
+    name
+} = {}) {
+    return {
+        message,
+        name
+    };
 }
 
 module.exports = formatErrorForSocket;
