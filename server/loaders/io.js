@@ -18,7 +18,7 @@ const {
     LEAVE,
     SEND_MESSAGE,
     SIGN_IN
-} = require("@utils/const/events/io");
+} = require("@root/const/events/io");
 
 module.exports = ({ server }) => {
     const io = socketIO(server);

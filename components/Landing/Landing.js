@@ -9,6 +9,14 @@ import {
     Select
 } from "element-ui";
 
+import {
+    CREATE_ROOM,
+    GET_ROOMS,
+    ROOM_CREATED,
+    ROOM_REMOVED,
+    SIGN_IN
+} from "@/const/events/io";
+
 import { mapMutations, mapState } from "vuex";
 
 import Landing from "@/components/Landing";
@@ -49,7 +57,7 @@ export default {
                 return this.$message.error("Please come up with a name for the room");
             }
 
-            this.$socket.emit("createRoom", {
+            this.$socket.emit(CREATE_ROOM, {
                 name: chatName
             }, (error, newRoom) => {
                 if (error) {
@@ -76,7 +84,7 @@ export default {
                 return this.$message.error("Please choose a chat you would like to join");
             }
 
-            this.$socket.emit("signIn", {
+            this.$socket.emit(SIGN_IN, {
                 name: userName,
                 roomId: selectedRoomId
             }, (error, user) => {
@@ -106,7 +114,7 @@ export default {
     mounted () {
         const { listener } = this.sockets;
 
-        this.$socket.emit("getRooms", (error, rooms) => {
+        this.$socket.emit(GET_ROOMS, (error, rooms) => {
             if (error) {
                 return this.$message.error(error.message);
             }
@@ -114,11 +122,11 @@ export default {
             this.setRooms(rooms);
         });
 
-        listener.subscribe("roomCreated", (room) => {
+        listener.subscribe(ROOM_CREATED, (room) => {
             this.addRoom(room);
         });
 
-        listener.subscribe("roomRemoved", ({ id, name }) => {
+        listener.subscribe(ROOM_REMOVED, ({ id, name }) => {
             this.removeRoom(id);
 
             this.$message({

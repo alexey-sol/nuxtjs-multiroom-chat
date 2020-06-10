@@ -4,6 +4,15 @@ import {
     Input
 } from "element-ui";
 
+import {
+    JOIN,
+    LEAVE,
+    MESSAGE_SENT,
+    SEND_MESSAGE,
+    USER_JOINED,
+    USER_LEFT
+} from "@/const/events/io";
+
 import { mapMutations, mapState } from "vuex";
 
 export default {
@@ -33,7 +42,11 @@ export default {
             });
         }
 
-        this.$socket.emit("join", this.currentUser, (error, roomData) => {
+        // TODO: if no currentUser, show popup to sign up
+
+        // TODO: doc title is chat's name
+
+        this.$socket.emit(JOIN, this.currentUser, (error, roomData) => {
             if (error) {
                 return this.$message.error(error.message);
             }
@@ -45,15 +58,16 @@ export default {
             this.setUsers(users);
         });
 
-        listener.subscribe("userJoined", (user) => {
+        listener.subscribe(USER_JOINED, (user) => {
             this.addUser(user);
         });
 
-        listener.subscribe("userLeft", (id) => {
+        listener.subscribe(USER_LEFT, (id) => {
             this.removeUser(id);
         });
 
-        listener.subscribe("messageSent", (message) => {
+        listener.subscribe(MESSAGE_SENT, (message) => {
+            console.log(message)
             this.addMessage(message);
         });
     },
@@ -63,9 +77,6 @@ export default {
             message: ""
         };
     },
-
-    // dataAsync () {
-    // },
 
     methods: {
         ...mapMutations({
@@ -86,7 +97,7 @@ export default {
         },
 
         leaveChat () {
-            this.$socket.emit("leave", () => {
+            this.$socket.emit(LEAVE, () => {
                 this.clearState();
 
                 this.$router.push({
@@ -98,7 +109,7 @@ export default {
         sendMessage () {
             const { currentUser, message } = this;
 
-            this.$socket.emit("sendMessage", {
+            this.$socket.emit(SEND_MESSAGE, {
                 authorName: currentUser.name,
                 roomId: currentUser.roomId,
                 text: message

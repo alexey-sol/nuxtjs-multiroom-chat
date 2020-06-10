@@ -4,7 +4,7 @@ const compression = require("compression");
 const cors = require("cors");
 const helmet = require("helmet");
 
-const { DEVELOPMENT } = require("@utils/const/nodeEnv");
+const { DEVELOPMENT } = require("@root/const/nodeEnv");
 const ProcessManager = require("@utils/helpers/ProcessManager");
 const config = require("@root/nuxt.config.js");
 

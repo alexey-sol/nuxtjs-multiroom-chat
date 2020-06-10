@@ -1,6 +1,6 @@
 const dotenv = require("dotenv");
 
-const { DEVELOPMENT } = require("@utils/const/nodeEnv");
+const { DEVELOPMENT } = require("@root/const/nodeEnv");
 const ProcessManager = require("@utils/helpers/ProcessManager");
 const validateEnv = require("@utils/validators/validateEnv");
 

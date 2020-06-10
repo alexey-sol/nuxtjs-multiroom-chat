@@ -1,4 +1,4 @@
-const { SIGTERM } = require("@utils/const/signals");
+const { SIGTERM } = require("@root/const/signals");
 const logger = require("@logger");
 
 const ERROR_CODE = 1;

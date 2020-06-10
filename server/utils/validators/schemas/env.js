@@ -3,7 +3,7 @@ const Joi = require("@hapi/joi");
 const {
     DEVELOPMENT,
     PRODUCTION
-} = require("@utils/const/nodeEnv");
+} = require("@root/const/nodeEnv");
 
 module.exports = Joi.object({
     BASE_URL: Joi

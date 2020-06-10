@@ -1,27 +1,14 @@
-const { MESSAGE_SENT, USER_JOINED } = require("@utils/const/events/io");
+const { MESSAGE_SENT, USER_JOINED } = require("@root/const/events/io");
 const Message = require("@models/Message");
 const { messages, rooms, users } = require("@models/storages");
 
 function onJoin (socket, currentUser, cb) {
-    const {
-        name,
-        roomId
-    } = currentUser;
-
+    const { roomId } = currentUser;
     const room = rooms.getItem(roomId);
 
     socket.join(roomId);
 
-    const welcomeMessage = new Message({
-        authorName: "system",
-        roomId,
-        text: `Welcome, ${name}!`
-    });
-
-    const messagesWithWelcome = [
-        ...messages.getItems({ roomId }),
-        welcomeMessage
-    ];
+    const messagesWithWelcome = getAllMessagesForUser(currentUser);
 
     const roomData = {
         messages: messagesWithWelcome,
@@ -29,18 +16,48 @@ function onJoin (socket, currentUser, cb) {
         users: users.getItems({ roomId })
     };
 
-    const userJoinedMessage = new Message({
+    reportUserJoined(socket, currentUser);
+
+    cb(null, roomData);
+}
+
+module.exports = onJoin;
+
+function getAllMessagesForUser (user) {
+    const { name, roomId } = user;
+
+    const welcomeMessage = new Message({
         authorName: "system",
+        roomId,
+        text: `Welcome, ${name}!`
+    });
+
+    return [
+        ...messages.getItems({ roomId }),
+        welcomeMessage
+    ];
+}
+
+function reportUserJoined (socket, user) {
+    const { name, roomId } = user;
+
+    const userJoinedMessage = new Message({
+        authorName: "system", // TODO - to const
         roomId,
         text: `${name} has joined the chat`
     });
 
     messages.addItem(userJoinedMessage);
 
-    socket.broadcast.to(roomId).emit(MESSAGE_SENT, userJoinedMessage);
-    socket.broadcast.to(roomId).emit(USER_JOINED, currentUser);
+    socket
+        .broadcast
+        .to(roomId)
+        .emit(MESSAGE_SENT, userJoinedMessage);
 
-    cb(null, roomData);
+    socket
+        .broadcast
+        .to(roomId)
+        .emit(USER_JOINED, user);
+
+    return user;
 }
-
-module.exports = onJoin;

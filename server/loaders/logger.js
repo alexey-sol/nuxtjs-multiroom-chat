@@ -1,8 +1,8 @@
 const { createLogger, format, transports } = require("winston");
 const path = require("path");
 
-const { DEBUG, ERROR } = require("@utils/const/loggingLevels");
-const { PRODUCTION } = require("@utils/const/nodeEnv");
+const { DEBUG, ERROR } = require("@root/const/loggingLevels");
+const { PRODUCTION } = require("@root/const/nodeEnv");
 const DateFormatter = require("@utils/formatters/DateFormatter");
 
 const {

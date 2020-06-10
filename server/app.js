@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
 
-const { SIGTERM } = require("@utils/const/signals");
+const { SIGTERM } = require("@root/const/signals");
 const ProcessManager = require("@utils/helpers/ProcessManager");
 const loaders = require("@loaders");
 const logger = require("@logger");

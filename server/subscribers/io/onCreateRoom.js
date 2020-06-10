@@ -1,4 +1,4 @@
-const { ROOM_CREATED } = require("@utils/const/events/io");
+const { ROOM_CREATED } = require("@root/const/events/io");
 const Room = require("@models/Room");
 const { rooms } = require("@models/storages");
 const formatErrorForSocket = require("@utils/formatters/formatErrorForSocket");
@@ -12,10 +12,7 @@ function onCreateRoom (socket, roomProps, cb) {
             throw error;
         }
 
-        const room = new Room(roomProps);
-        rooms.addItem(room);
-
-        socket.broadcast.emit(ROOM_CREATED, room);
+        const room = createRoomAndReport(socket, roomProps);
 
         cb(null, room);
     } catch (error) {
@@ -24,3 +21,15 @@ function onCreateRoom (socket, roomProps, cb) {
 }
 
 module.exports = onCreateRoom;
+
+function createRoomAndReport (socket, roomProps) {
+    const room = new Room(roomProps);
+
+    rooms.addItem(room);
+
+    socket
+        .broadcast
+        .emit(ROOM_CREATED, room);
+
+    return room;
+}
