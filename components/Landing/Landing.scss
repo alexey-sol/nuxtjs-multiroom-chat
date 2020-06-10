@@ -1,6 +1,6 @@
 @import "@/assets/styles/style.scss";
 
-.container {
+.wrapper {
     display: grid;
     box-sizing: border-box;
     grid-template-areas:
@@ -11,7 +11,7 @@
     max-width: 35rem;
     margin-top: 10vh;
     border-radius: 0.5rem;
-    font-size: $font-size--small;
+    font-size: $font-size--medium;
     background-color: $color-secondary;
     overflow: hidden;
     -webkit-box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.2);

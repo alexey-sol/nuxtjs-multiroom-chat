@@ -15,14 +15,26 @@ import {
 } from "@/const/events/io";
 
 import { UNAUTHORIZED_ERROR } from "@/const/errorNames";
+import Message from "@/components/Message";
 import SignInDialog from "@/components/SignInDialog";
 import { mapMutations, mapState } from "vuex";
 
 export default {
+    head () {
+        const roomName = this.currentRoom.name;
+
+        return {
+            title: (roomName)
+                ? `Chat: ${roomName}`
+                : "Chat"
+        };
+    },
+
     components: {
         Button,
         Container,
         Input,
+        Message,
         SignInDialog
     },
 
@@ -157,6 +169,29 @@ export default {
             this.$router.push({
                 path: "/"
             });
+        },
+
+        sendMessage () {
+            if (!this.message) {
+                return;
+            }
+
+            this.emitSendMessage();
+            this.message = "";
+            this.scrollDownAfterRenderingMessage();
+        },
+
+        scrollDownAfterRenderingMessage () {
+            const chatWindowElem = this.$refs["chat-window"];
+
+            if (chatWindowElem) {
+                setTimeout(() => {
+                    chatWindowElem.scrollTop = chatWindowElem.scrollHeight;
+                }, 0);
+
+                // Watcher didn't work out ("scrollHeight" remains obsolete after the
+                // state changes); resorted to manipulate event loop.
+            }
         },
 
         signIn (partialProps = {}) {

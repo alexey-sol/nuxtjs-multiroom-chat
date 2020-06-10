@@ -1,0 +1,49 @@
+@import "@/assets/styles/style.scss";
+
+.message {
+    display: grid;
+    box-sizing: border-box;
+    grid-template-areas:
+        "author-name created-at"
+        "text text";
+    grid-template-columns: auto 1fr;
+    row-gap: 0.5rem;
+    column-gap: 1rem;
+    padding: 1rem;
+    word-break: break-word;
+
+    .author-name {
+        grid-area: author-name;
+        display: flex;
+        align-items: center;
+        font-weight: bolder;
+    }
+
+    .created-at {
+        grid-area: created-at;
+        display: flex;
+        align-items: center;
+        font-size: $font-size--small;
+        color: $text-color--secondary;
+    }
+
+    .text {
+        grid-area: text;
+    }
+
+    &.system {
+        justify-self: end;
+        max-width: 50%;
+        border-radius: 0.5rem;
+        background-color: $bg-color--base;
+        text-align: right;
+
+        .author-name {
+            display: none;
+        }
+
+        .created-at {
+            justify-content: flex-end;
+        }
+    }
+}

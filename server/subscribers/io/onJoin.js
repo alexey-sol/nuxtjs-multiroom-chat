@@ -22,8 +22,6 @@ function onJoin (socket, roomId, user, cb) {
 
         socket.join(roomId);
 
-        // let messagesWithWelcome = getMessagesWithWelcome(user);
-
         const roomData = {
             messages: getMessagesWithWelcome(user),
             room,

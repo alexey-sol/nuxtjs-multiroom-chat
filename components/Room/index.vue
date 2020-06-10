@@ -1,6 +1,6 @@
 <template>
     <Container
-        :class="['container', showSignIn ? 'collapsed' : '']"
+        :class="['wrapper', (showSignIn) ? 'collapsed' : '']"
     >
         <header class="header">
             <div class="chat-name">
@@ -20,7 +20,7 @@
         <main class="main">
             <section class="users">
                 <header class="users-header">
-                    Active users:
+                    Users in the chat:
                 </header>
 
                 <ul class="users-list">
@@ -34,17 +34,18 @@
                 </ul>
             </section>
 
-            <section class="chat">
+            <section
+                ref="chat-window"
+                class="chat"
+            >
                 <ul class="messages-list">
-                    <li
+                    <Message
                         v-for="message in messages"
                         :key="message.id"
-                        class="message-item"
-                    >
-                        {{ message.authorName }}
-                        {{ message.text }}
-                        {{ message.createdAt }}
-                    </li>
+                        :author-name="message.authorName"
+                        :created-at="new Date(message.createdAt)"
+                        :text="message.text"
+                    />
                 </ul>
             </section>
 
@@ -54,10 +55,10 @@
                     maxlength="99"
                     placeholder="Message"
                     show-word-limit
-                    @keypress.enter.exact.native="emitSendMessage"
+                    @keypress.enter.exact.native="sendMessage"
                 />
 
-                <Button @click="emitSendMessage">
+                <Button @click="sendMessage">
                     Send
                 </Button>
             </section>

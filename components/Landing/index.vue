@@ -1,5 +1,5 @@
 <template>
-    <Container class="container">
+    <Container class="wrapper">
         <header class="header">
             Nuxt.js Multiroom Chat
         </header>

@@ -1,12 +1,13 @@
 import Landing from "@/components/Landing";
 
 export default {
-    components: {
-        Landing
-    },
     head () {
         return {
-            title: "Chat: joining room"
+            title: "Nuxt.js Multiroom Chat"
         };
+    },
+
+    components: {
+        Landing
     }
 };
