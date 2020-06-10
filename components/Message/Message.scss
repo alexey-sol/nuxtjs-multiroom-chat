@@ -11,12 +11,13 @@
     column-gap: 1rem;
     padding: 1rem;
     word-break: break-word;
+    animation: fade-in 0.15s;
 
     .author-name {
         grid-area: author-name;
         display: flex;
         align-items: center;
-        font-weight: bolder;
+        font-weight: 500;
     }
 
     .created-at {
@@ -44,6 +45,12 @@
 
         .created-at {
             justify-content: flex-end;
+        }
+
+        @media screen and (max-width: 500px) {
+            & {
+                max-width: 100%;
+            }
         }
     }
 }

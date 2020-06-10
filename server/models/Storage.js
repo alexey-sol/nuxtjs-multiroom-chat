@@ -14,9 +14,9 @@ class Storage {
         return this.storage.find(item => item.id === id);
     }
 
-    getItems (filter) {
-        return (filter)
-            ? filterItemsByField(this.storage, filter)
+    getItems (filterByField) {
+        return (filterByField)
+            ? filterItemsByField(this.storage, filterByField)
             : this.storage;
     }
 
@@ -24,9 +24,9 @@ class Storage {
         const filteredItems = this.storage.filter(item => item.id !== id);
         this.storage = filteredItems;
 
-        const didDelete = this.storage.length !== filteredItems.length;
+        const didDeletionSucceed = this.storage.length !== filteredItems.length;
 
-        return (didDelete)
+        return (didDeletionSucceed)
             ? id
             : null;
     }

@@ -39,14 +39,15 @@
         box-sizing: border-box;
         grid-template-areas:
             "users chat"
-            "message-field message-field";
+            "message-input message-input";
         grid-template-rows: minmax(20rem, 40rem) 4rem;
-        grid-template-columns: 20rem 1fr;
+        grid-template-columns: minmax(15rem, 20rem) minmax(20rem, 1fr);
         row-gap: 2rem;
         padding: 2rem;
     }
 
     .users {
+        @include scrollbar-for("&");
         grid-area: users;
         box-sizing: border-box;
         padding-top: 1rem;
@@ -56,7 +57,7 @@
 
         .users-header {
             margin-bottom: 0.5rem;
-            font-weight: bolder;
+            font-weight: 500;
         }
 
         .users-list {
@@ -69,12 +70,18 @@
             list-style-type: none;
 
             .user-item {
+                box-sizing: border-box;
                 word-break: break-all;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                background-color: $bg-color--base;
+                animation: fade-in 0.15s;
             }
         }
     }
 
     .chat {
+        @include scrollbar-for("&");
         grid-area: chat;
         box-sizing: border-box;
         padding: 0 1rem;
@@ -95,8 +102,8 @@
         }
     }
 
-    .message-field {
-        grid-area: message-field;
+    .message-input {
+        grid-area: message-input;
         display: grid;
         grid-template-columns: 1fr auto;
         column-gap: 1rem;

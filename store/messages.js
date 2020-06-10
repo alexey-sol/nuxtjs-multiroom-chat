@@ -3,7 +3,7 @@ export const state = () => ({
 });
 
 export const mutations = {
-    addMessage (state, message, cb) {
+    addMessage (state, message) {
         state.items = [...state.items, message];
     },
 

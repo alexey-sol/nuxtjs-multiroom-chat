@@ -49,12 +49,12 @@
                 </ul>
             </section>
 
-            <section class="message-field">
+            <section class="message-input">
                 <Input
                     v-model="message"
-                    maxlength="99"
+                    class="input"
+                    maxlength="500"
                     placeholder="Message"
-                    show-word-limit
                     @keypress.enter.exact.native="sendMessage"
                 />
 
