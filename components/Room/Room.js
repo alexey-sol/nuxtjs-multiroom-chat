@@ -145,17 +145,17 @@ export default {
             });
         },
 
-        signIn (partialProps = {}) {
-            if (!partialProps.name) {
-                return this.$message.error("Please type in your name");
-            }
-
-            const roomId = this.$route.params.id;
-
+        signIn (name) {
             const userProps = {
-                ...partialProps,
-                roomId
+                name,
+                roomId: this.$route.params.id
             };
+
+            const { error } = this.validateUserProps(userProps);
+
+            if (error) {
+                return this.$message.error(error.message);
+            }
 
             this.emitSignIn(userProps);
         }

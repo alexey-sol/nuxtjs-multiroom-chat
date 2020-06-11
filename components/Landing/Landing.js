@@ -61,18 +61,20 @@ export default {
         }),
 
         createRoom () {
-            const { chatName } = this;
+            const roomProps = {
+                name: this.chatName
+            };
 
-            if (!chatName) {
-                return this.$message.error("Please come up with a name for the room");
+            const { error } = this.validateRoomProps(roomProps);
+
+            if (error) {
+                return this.$message.error(error.message);
             }
 
-            this.emitCreateRoom(chatName);
+            this.emitCreateRoom(roomProps);
         },
 
-        emitCreateRoom (name) {
-            const roomProps = { name };
-
+        emitCreateRoom (roomProps) {
             this.$socket.emit(
                 CREATE_ROOM,
                 roomProps,
@@ -87,12 +89,7 @@ export default {
             );
         },
 
-        emitSignIn () {
-            const userProps = {
-                name: this.userName,
-                roomId: this.selectedRoomId
-            };
-
+        emitSignIn (userProps) {
             this.$socket.emit(
                 SIGN_IN,
                 userProps,
@@ -133,15 +130,18 @@ export default {
         },
 
         signIn () {
-            if (!this.userName) {
-                return this.$message.error("Please type in your name");
+            const userProps = {
+                name: this.userName,
+                roomId: this.selectedRoomId
+            };
+
+            const { error } = this.validateUserProps(userProps);
+
+            if (error) {
+                return this.$message.error(error.message);
             }
 
-            if (!this.selectedRoomId) {
-                return this.$message.error("Please choose a chat you would like to join");
-            }
-
-            this.emitSignIn();
+            this.emitSignIn(userProps);
         }
     },
 

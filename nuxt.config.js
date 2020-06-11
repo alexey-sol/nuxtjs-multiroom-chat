@@ -17,7 +17,8 @@ module.exports = {
 
     plugins: [
         { src: "@/plugins/socket.client.js", ssr: false },
-        { src: "@/plugins/element-ui.js" }
+        { src: "@/plugins/element-ui.js" },
+        { src: "@/plugins/utils/validators" }
     ],
 
     buildModules: [

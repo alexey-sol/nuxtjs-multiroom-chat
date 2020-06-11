@@ -15,11 +15,11 @@
                     </span>
 
                     <Input
-                        v-model="name"
+                        v-model="userName"
                         autofocus
                         maxlength="30"
                         placeholder="Name"
-                        @keypress.enter.exact.native.prevent="handleSubmit({ name })"
+                        @keypress.enter.exact.native.prevent="handleSubmit(userName)"
                     />
                 </label>
             </FormItem>
@@ -37,7 +37,7 @@
                 <Button
                     class="button"
                     type="primary"
-                    @click="handleSubmit({ name })"
+                    @click="handleSubmit(userName)"
                 >
                     Let me in
                 </Button>
