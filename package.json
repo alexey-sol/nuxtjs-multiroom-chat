@@ -4,6 +4,10 @@
   "description": "A simple multiroom chat built with Nuxt.js",
   "author": "Alexey Soloviev",
   "private": true,
+  "engines": {
+    "node": ">=12.0.0 <13.0.0",
+    "npm": ">=6.0.0"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",
