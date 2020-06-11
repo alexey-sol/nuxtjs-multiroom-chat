@@ -8,7 +8,7 @@
             <Form @submit.prevent="signIn">
                 <FormItem class="form-item">
                     <label>
-                        <span>
+                        <span class="label-text">
                             Your name:
                         </span>
 
@@ -23,7 +23,7 @@
 
                 <FormItem class="form-item">
                     <label>
-                        <span>
+                        <span class="label-text">
                             Maybe you would like to spin up a new chat?
                         </span>
 
@@ -31,13 +31,13 @@
                             v-model="chatName"
                             maxlength="30"
                             placeholder="Chat name"
-                            @keypress.enter.exact.native="createChat"
+                            @keypress.enter.exact.native="createRoom"
                         />
                     </label>
 
                     <Button
                         class="button"
-                        @click="createChat"
+                        @click="createRoom"
                     >
                         Create!
                     </Button>
@@ -45,7 +45,7 @@
 
                 <FormItem class="form-item">
                     <label>
-                        <span>
+                        <span class="label-text">
                             Chat:
                         </span>
 

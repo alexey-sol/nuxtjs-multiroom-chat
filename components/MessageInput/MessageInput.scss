@@ -1,0 +1,16 @@
+@import "@/assets/styles/style.scss";
+
+.message-input-container {
+    grid-area: message-input;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 1rem;
+
+    @media screen and (max-width: $bp--500) {
+        & {
+            grid-template-rows: 1fr 1fr;
+            grid-template-columns: 1fr;
+            row-gap: 1rem;
+        }
+    }
+}

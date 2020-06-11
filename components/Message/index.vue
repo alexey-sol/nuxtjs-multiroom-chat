@@ -1,17 +1,15 @@
 <template>
-    <li
-        :class="['message', (isSystemMessage) ? 'system' : '']"
-    >
-        <div class="author-name">
-            {{ authorName }}
+    <li :class="['message', (isSystemMessage) ? 'system' : '']">
+        <div :class="['author-name', (isAuthor) ? 'is-author' : '']">
+            {{ message.authorName }}
         </div>
 
         <div class="created-at">
-            {{ formatDate(createdAt) }}
+            {{ formatDate(message.createdAt) }}
         </div>
 
         <div class="text">
-            {{ text }}
+            {{ message.text }}
         </div>
     </li>
 </template>

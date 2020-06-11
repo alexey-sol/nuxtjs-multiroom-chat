@@ -22,9 +22,9 @@ class Storage {
 
     removeItem (id) {
         const filteredItems = this.storage.filter(item => item.id !== id);
-        this.storage = filteredItems;
-
         const didDeletionSucceed = this.storage.length !== filteredItems.length;
+
+        this.storage = filteredItems;
 
         return (didDeletionSucceed)
             ? id

@@ -44,7 +44,7 @@ function removeUserAndReport (socket, user) {
     socket
         .broadcast
         .to(roomId)
-        .emit(USER_LEFT, id);
+        .emit(USER_LEFT, removedUserId);
 
     const userLeftMessage = new Message({
         authorName: SYSTEM,
@@ -63,13 +63,9 @@ function removeUserAndReport (socket, user) {
 }
 
 function removeRoomAndReport (io, roomId) {
-    const { name } = rooms.getItem(roomId);
     const removedRoomId = rooms.removeItem(roomId);
 
-    io.emit(ROOM_REMOVED, {
-        id: roomId,
-        name
-    });
+    io.emit(ROOM_REMOVED, removedRoomId);
 
     return removedRoomId;
 }

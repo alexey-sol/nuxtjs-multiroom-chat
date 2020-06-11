@@ -1,23 +1,18 @@
-import {
-    Button,
-    Container,
-    Input
-} from "element-ui";
+import { Button, Container } from "element-ui";
+import { mapMutations, mapState } from "vuex";
 
 import {
     JOIN,
     LEAVE,
-    MESSAGE_SENT,
-    SEND_MESSAGE,
-    SIGN_IN,
-    USER_JOINED,
-    USER_LEFT
+    SIGN_IN
 } from "@/const/events/io";
 
+import MessageInput from "@/components/MessageInput";
+import Messages from "@/components/Messages";
+import Users from "@/components/Users";
+
 import { UNAUTHORIZED_ERROR } from "@/const/errorNames";
-import Message from "@/components/Message";
 import SignInDialog from "@/components/SignInDialog";
-import { mapMutations, mapState } from "vuex";
 
 export default {
     head () {
@@ -33,40 +28,25 @@ export default {
     components: {
         Button,
         Container,
-        Input,
-        Message,
+        MessageInput,
+        Messages,
+        Users,
         SignInDialog
-    },
-
-    computed: mapState({
-        currentRoom: (state) => state.currentRoom,
-        currentUser: (state) => state.currentUser,
-        messages: (state) => state.messages.items,
-        users: (state) => state.users.items
-    }),
-
-    mounted () {
-        this.emitJoin();
-
-        const { listener } = this.sockets;
-
-        listener.subscribe(USER_JOINED, this.addUser);
-        listener.subscribe(USER_LEFT, this.removeUser);
-        listener.subscribe(MESSAGE_SENT, this.addMessage);
     },
 
     data () {
         return {
-            message: "",
             showSignIn: false
         };
     },
 
+    computed: mapState({
+        currentRoom: (state) => state.currentRoom,
+        currentUser: (state) => state.currentUser
+    }),
+
     methods: {
         ...mapMutations({
-            addMessage: "messages/addMessage",
-            addUser: "users/addUser",
-            removeUser: "users/removeUser",
             setCurrentRoom: "setCurrentRoom",
             setCurrentUser: "setCurrentUser",
             setMessages: "messages/setMessages",
@@ -87,27 +67,14 @@ export default {
                 JOIN,
                 id,
                 this.currentUser,
-                this.handleJoinEvent
+                this.handleJoinCb
             );
         },
 
         emitLeave () {
             this.$socket.emit(
                 LEAVE,
-                this.handleLeaveEvent
-            );
-        },
-
-        emitSendMessage () {
-            const messageProps = {
-                authorName: this.currentUser.name,
-                roomId: this.currentUser.roomId,
-                text: this.message
-            };
-
-            this.$socket.emit(
-                SEND_MESSAGE,
-                messageProps
+                this.handleLeaveCb
             );
         },
 
@@ -115,11 +82,11 @@ export default {
             this.$socket.emit(
                 SIGN_IN,
                 userProps,
-                this.handleSignInEvent
+                this.handleSignInCb
             );
         },
 
-        handleJoinEvent (error, roomData) {
+        handleJoinCb (error, roomData) {
             if (error) {
                 return this.handleJoinError(error);
             }
@@ -150,12 +117,19 @@ export default {
             this.setUsers(users);
         },
 
-        handleLeaveEvent () {
+        handleLeaveCb () {
+            const { name } = this.currentRoom;
+
+            this.$message({
+                message: `The room "${name}" has been removed since there's nobody left`,
+                type: "warning"
+            });
+
             this.clearState();
             this.redirectToLanding();
         },
 
-        handleSignInEvent (error, user) {
+        handleSignInCb (error, user) {
             if (error) {
                 return this.$message.error(error.message);
             }
@@ -169,29 +143,6 @@ export default {
             this.$router.push({
                 path: "/"
             });
-        },
-
-        sendMessage () {
-            if (!this.message) {
-                return;
-            }
-
-            this.emitSendMessage();
-            this.message = "";
-            this.scrollDownAfterRenderingMessage();
-        },
-
-        scrollDownAfterRenderingMessage () {
-            const chatWindowElem = this.$refs["chat-window"];
-
-            if (chatWindowElem) {
-                setTimeout(() => {
-                    chatWindowElem.scrollTop = chatWindowElem.scrollHeight;
-                }, 0);
-
-                // Watcher didn't work out ("scrollHeight" remains obsolete after the
-                // state changes); resorted to manipulate event loop.
-            }
         },
 
         signIn (partialProps = {}) {
@@ -208,5 +159,9 @@ export default {
 
             this.emitSignIn(userProps);
         }
+    },
+
+    mounted () {
+        this.emitJoin();
     }
 };

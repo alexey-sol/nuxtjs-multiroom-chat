@@ -12,7 +12,7 @@
                 v-else
                 class="error"
             >
-                Something went wrong.
+                Something went wrong
             </div>
 
             <nuxt-link to="/">

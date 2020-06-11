@@ -1,0 +1,36 @@
+@import "@/assets/styles/style.scss";
+
+.messages-container {
+    @include scrollbar-for("&");
+    grid-area: messages;
+    box-sizing: border-box;
+    padding-right: 1rem;
+    overflow: auto;
+
+    .messages-list {
+        display: grid;
+        box-sizing: border-box;
+        grid-template-columns: 1fr;
+        row-gap: 0.5rem;
+        padding: 0;
+        padding-left: 1rem;
+        margin: 0;
+        list-style-type: none;
+
+        .message-item {
+            word-break: break-all;
+        }
+    }
+
+    @media screen and (max-width: $bp--500) {
+        .messages-list {
+            padding-left: 0;
+        }
+    }
+
+    @media screen and (max-width: $bp--300) {
+        & {
+            padding-right: 1vw;
+        }
+    }
+}

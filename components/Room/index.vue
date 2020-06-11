@@ -24,50 +24,9 @@
         </header>
 
         <main class="main">
-            <section class="users">
-                <header class="users-header">
-                    Users in the chat:
-                </header>
-
-                <ul class="users-list">
-                    <li
-                        v-for="user in users"
-                        :key="user.id"
-                        class="user-item"
-                    >
-                        {{ user.name }}
-                    </li>
-                </ul>
-            </section>
-
-            <section
-                ref="chat-window"
-                class="chat"
-            >
-                <ul class="messages-list">
-                    <Message
-                        v-for="message in messages"
-                        :key="message.id"
-                        :author-name="message.authorName"
-                        :created-at="new Date(message.createdAt)"
-                        :text="message.text"
-                    />
-                </ul>
-            </section>
-
-            <section class="message-input">
-                <Input
-                    v-model="message"
-                    class="input"
-                    maxlength="500"
-                    placeholder="Message"
-                    @keypress.enter.exact.native="sendMessage"
-                />
-
-                <Button @click="sendMessage">
-                    Send
-                </Button>
-            </section>
+            <Users :current-user="currentUser" />
+            <Messages :current-user="currentUser" />
+            <MessageInput :current-user="currentUser" />
         </main>
 
         <SignInDialog

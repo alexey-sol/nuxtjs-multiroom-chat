@@ -4,14 +4,13 @@ import { SYSTEM } from "@/const/reservedNames";
 
 export default {
     props: {
-        authorName: String,
-        createdAt: Date,
-        text: String
+        isAuthor: Boolean,
+        message: Object
     },
 
     data () {
         return {
-            isSystemMessage: this.authorName === SYSTEM
+            isSystemMessage: this.message.authorName === SYSTEM
         };
     },
 

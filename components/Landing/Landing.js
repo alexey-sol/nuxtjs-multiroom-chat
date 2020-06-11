@@ -9,6 +9,8 @@ import {
     Select
 } from "element-ui";
 
+import { mapMutations, mapState } from "vuex";
+
 import {
     CREATE_ROOM,
     GET_ROOMS,
@@ -16,8 +18,6 @@ import {
     ROOM_REMOVED,
     SIGN_IN
 } from "@/const/events/io";
-
-import { mapMutations, mapState } from "vuex";
 
 import Landing from "@/components/Landing";
 
@@ -42,65 +42,6 @@ export default {
         };
     },
 
-    methods: {
-        ...mapMutations({
-            addRoom: "rooms/addRoom",
-            removeRoom: "rooms/removeRoom",
-            setCurrentUser: "setCurrentUser",
-            setRooms: "rooms/setRooms"
-        }),
-
-        createChat () {
-            const { chatName } = this;
-
-            if (!chatName) {
-                return this.$message.error("Please come up with a name for the room");
-            }
-
-            this.$socket.emit(CREATE_ROOM, {
-                name: chatName
-            }, (error, newRoom) => {
-                if (error) {
-                    return this.$message.error(error.message);
-                }
-
-                this.addRoom(newRoom);
-
-                this.$message({
-                    message: "Created!",
-                    type: "success"
-                });
-            });
-        },
-
-        signIn () {
-            const { selectedRoomId, userName } = this;
-
-            if (!userName) {
-                return this.$message.error("Please type in your name");
-            }
-
-            if (!selectedRoomId) {
-                return this.$message.error("Please choose a chat you would like to join");
-            }
-
-            this.$socket.emit(SIGN_IN, {
-                name: userName,
-                roomId: selectedRoomId
-            }, (error, user) => {
-                if (error) {
-                    return this.$message.error(error.message);
-                }
-
-                this.setCurrentUser(user);
-
-                this.$router.push({
-                    path: `/chat/${selectedRoomId}`
-                });
-            });
-        }
-    },
-
     computed: mapState({
         roomOptions: ({ rooms }) => rooms
             .items
@@ -111,28 +52,120 @@ export default {
             .reverse()
     }),
 
-    mounted () {
-        const { listener } = this.sockets;
+    methods: {
+        ...mapMutations({
+            addRoom: "rooms/addRoom",
+            removeRoom: "rooms/removeRoom",
+            setCurrentUser: "setCurrentUser",
+            setRooms: "rooms/setRooms"
+        }),
 
-        this.$socket.emit(GET_ROOMS, (error, rooms) => {
+        createRoom () {
+            const { chatName } = this;
+
+            if (!chatName) {
+                return this.$message.error("Please come up with a name for the room");
+            }
+
+            this.emitCreateRoom(chatName);
+        },
+
+        emitCreateRoom (name) {
+            const roomProps = { name };
+
+            this.$socket.emit(
+                CREATE_ROOM,
+                roomProps,
+                (error, newRoom) => this.handleCreateRoomCb(error, newRoom)
+            );
+        },
+
+        emitGetRooms () {
+            this.$socket.emit(
+                GET_ROOMS,
+                (error, rooms) => this.handleGetRoomsCb(error, rooms)
+            );
+        },
+
+        emitSignIn () {
+            const userProps = {
+                name: this.userName,
+                roomId: this.selectedRoomId
+            };
+
+            this.$socket.emit(
+                SIGN_IN,
+                userProps,
+                (error, user) => this.handleSignInCb(error, user));
+        },
+
+        handleCreateRoomCb (error, newRoom) {
+            if (error) {
+                return this.$message.error(error.message);
+            }
+
+            this.addRoom(newRoom);
+
+            this.$message({
+                message: "Created!",
+                type: "success"
+            });
+        },
+
+        handleGetRoomsCb (error, rooms) {
             if (error) {
                 return this.$message.error(error.message);
             }
 
             this.setRooms(rooms);
-        });
+        },
 
-        listener.subscribe(ROOM_CREATED, (room) => {
-            this.addRoom(room);
-        });
+        handleSignInCb (error, user) {
+            if (error) {
+                return this.$message.error(error.message);
+            }
 
-        listener.subscribe(ROOM_REMOVED, ({ id, name }) => {
-            this.removeRoom(id);
+            this.setCurrentUser(user);
 
-            this.$message({
-                message: `The room "${name}" has been removed since there's nobody left`,
-                type: "warning"
+            this.$router.push({
+                path: `/chat/${this.selectedRoomId}`
             });
-        });
+        },
+
+        signIn () {
+            if (!this.userName) {
+                return this.$message.error("Please type in your name");
+            }
+
+            if (!this.selectedRoomId) {
+                return this.$message.error("Please choose a chat you would like to join");
+            }
+
+            this.emitSignIn();
+        }
+    },
+
+    mounted () {
+        this.emitGetRooms();
+
+        const { listener } = this.sockets;
+
+        listener.subscribe(
+            ROOM_CREATED,
+            this.addRoom
+        );
+
+        listener.subscribe(
+            ROOM_REMOVED,
+            this.removeRoom
+        );
+    },
+
+    beforeDestroy () {
+        const { listener } = this.sockets;
+
+        listener.unsubscribe(GET_ROOMS);
+        listener.unsubscribe(ROOM_CREATED);
+        listener.unsubscribe(ROOM_REMOVED);
     }
 };

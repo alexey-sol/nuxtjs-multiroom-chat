@@ -1,0 +1,47 @@
+@import "@/assets/styles/style.scss";
+
+.users-container {
+    @include scrollbar-for("&");
+    grid-area: users;
+    box-sizing: border-box;
+    padding-top: 1rem;
+    padding-right: 2rem;
+    border-right: 1px solid $border-color--lighter;
+    overflow: auto;
+
+    .users-header {
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .users-list {
+        display: grid;
+        box-sizing: border-box;
+        grid-template-columns: 1fr;
+        row-gap: 1rem;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+
+        .user-item {
+            box-sizing: border-box;
+            word-break: break-all;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: $bg-color--base;
+            animation: fade-in 0.15s;
+        }
+    }
+
+    .postfix {
+        font-size: $font-size--small;
+        color: $text-color--secondary;
+    }
+
+    @media screen and (max-width: $bp--500) {
+        & {
+            padding-right: 0;
+            border-width: 0;
+        }
+    }
+}

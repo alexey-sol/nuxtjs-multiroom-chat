@@ -18,6 +18,10 @@
         display: flex;
         align-items: center;
         font-weight: 500;
+
+        &.is-author {
+            color: $color-primary;
+        }
     }
 
     .created-at {
@@ -54,6 +58,11 @@
     }
 
     @media screen and (max-width: $bp--300) {
+        & {
+            padding-right: 2vw;
+            padding-left: 2vw;
+        }
+
         &.system {
             max-width: 100%;
             justify-self: start;
@@ -63,7 +72,5 @@
                 justify-content: flex-start;
             }
         }
-
-
     }
 }
