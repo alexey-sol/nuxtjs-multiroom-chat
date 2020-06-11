@@ -17,7 +17,7 @@ function onLeave (io, socket, cb) {
 
         removeUserAndReport(socket, user);
 
-        const remainingUsers = users.getItems();
+        const remainingUsers = users.getItems({ roomId });
         const shouldRemoveRoom = remainingUsers.length === 0;
 
         if (shouldRemoveRoom) {

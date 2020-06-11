@@ -33,6 +33,11 @@
     }
 
     &.system {
+        grid-template-areas:
+            "created-at"
+            "text";
+        grid-template-columns: 1fr;
+        row-gap: 0.5rem;
         justify-self: end;
         max-width: 50%;
         border-radius: 0.5rem;
@@ -46,11 +51,19 @@
         .created-at {
             justify-content: flex-end;
         }
+    }
 
-        @media screen and (max-width: 500px) {
-            & {
-                max-width: 100%;
+    @media screen and (max-width: $bp--300) {
+        &.system {
+            max-width: 100%;
+            justify-self: start;
+            text-align: left;
+
+            .created-at {
+                justify-content: flex-start;
             }
         }
+
+
     }
 }

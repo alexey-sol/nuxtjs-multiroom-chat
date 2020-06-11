@@ -5,6 +5,7 @@
     box-sizing: border-box;
     grid-template-rows: 4rem auto;
     grid-template-columns: auto;
+    min-width: 25rem;
     max-width: 90rem;
     margin-top: 10vh;
     border-radius: 0.5rem;
@@ -16,12 +17,19 @@
     box-shadow: 0px 0px 20px -5px rgba(0,0,0,0.2);
 
     .header {
-        display: flex;
+        display: grid;
+        grid-template-rows: auto;
+        grid-template-columns: 1fr min-content;
         align-items: center;
         justify-content: space-between;
-        padding-left: 2rem;
+        padding-left: 2vw;
         background-color: $color-primary;
         color: $color-secondary;
+
+        .chat-name {
+            overflow-x: hidden;
+            white-space: nowrap;
+        }
 
         .button-leave {
             border-color: $button-leave--hover;
@@ -40,18 +48,18 @@
         grid-template-areas:
             "users chat"
             "message-input message-input";
-        grid-template-rows: minmax(20rem, 40rem) 4rem;
+        grid-template-rows: minmax(20rem, 40rem) 1fr;
         grid-template-columns: minmax(15rem, 20rem) minmax(20rem, 1fr);
         row-gap: 2rem;
-        padding: 2rem;
+        padding: 2vh 2vw;
     }
 
     .users {
         @include scrollbar-for("&");
         grid-area: users;
         box-sizing: border-box;
-        padding-top: 1rem;
-        padding-right: 2rem;
+        padding-top: 1vh;
+        padding-right: 2vw;
         border-right: 1px solid $border-color--lighter;
         overflow: auto;
 
@@ -72,7 +80,7 @@
             .user-item {
                 box-sizing: border-box;
                 word-break: break-all;
-                padding: 1rem;
+                padding: 1vh 1vw;
                 border-radius: 0.5rem;
                 background-color: $bg-color--base;
                 animation: fade-in 0.15s;
@@ -84,7 +92,7 @@
         @include scrollbar-for("&");
         grid-area: chat;
         box-sizing: border-box;
-        padding: 0 1rem;
+        padding: 0 1vh;
         overflow: auto;
 
         .messages-list {
@@ -107,6 +115,32 @@
         display: grid;
         grid-template-columns: 1fr auto;
         column-gap: 1rem;
+    }
+
+    @media screen and (max-width: $bp--500) {
+        .main {
+            grid-template-areas:
+                "chat"
+                "message-input"
+                "users";
+            grid-template-rows: minmax(20rem, 40rem) 1fr auto;
+            grid-template-columns: 1fr;
+        }
+
+        .prefix {
+            display: none;
+        }
+
+        .users {
+            padding-right: 0;
+            border-width: 0;
+        }
+
+        .message-input {
+            grid-template-rows: 1fr 1fr;
+            grid-template-columns: 1fr;
+            row-gap: 1rem;
+        }
     }
 }
 

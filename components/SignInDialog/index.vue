@@ -16,6 +16,7 @@
 
                     <Input
                         v-model="name"
+                        autofocus
                         maxlength="30"
                         placeholder="Name"
                         @keypress.enter.exact.native.prevent="handleSubmit({ name })"

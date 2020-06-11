@@ -52,7 +52,9 @@
                         <Select
                             v-model="selectedRoomId"
                             :disabled="roomOptions.length === 0"
-                            placeholder="Choose a chat"
+                            :placeholder="(roomOptions.length === 0)
+                                ? 'There\'s no rooms yet'
+                                : 'Choose a room'"
                         >
                             <Option
                                 v-for="option in roomOptions"

@@ -4,7 +4,13 @@
     >
         <header class="header">
             <div class="chat-name">
-                Chat name: {{ currentRoom.name }}
+                <span class="prefix">
+                    Chat name:
+                </span>
+
+                <span>
+                    {{ currentRoom.name }}
+                </span>
             </div>
 
             <Button

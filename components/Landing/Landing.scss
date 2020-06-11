@@ -8,6 +8,7 @@
         "main";
     grid-template-rows: 4rem auto;
     grid-template-columns: auto;
+    min-width: 25rem;
     max-width: 35rem;
     margin-top: 10vh;
     border-radius: 0.5rem;
@@ -28,6 +29,7 @@
         background-color: $color-primary;
         color: $color-secondary;
         user-select: none;
+        white-space: nowrap;
     }
 
     .main {
