@@ -33,7 +33,7 @@
     "cross-env": "~5.2.0",
     "dotenv": "~8.2.0",
     "element-ui": "~2.13.2",
-    "express": "~4.16.4",
+    "express": "~4.17.3",
     "helmet": "~3.22.0",
     "install": "~0.13.0",
     "module-alias": "~2.2.2",
