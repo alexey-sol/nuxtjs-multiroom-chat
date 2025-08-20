@@ -1,0 +1,14 @@
+services:
+    nuxtjs-multiroom-chat:
+        build:
+            dockerfile: builder/Dockerfile.demo
+        ports:
+            - 15501:80
+        command: npm start
+        restart: always
+        environment:
+            - BASE_URL=http://localhost:80
+            - HOST=0.0.0.0
+            - PORT=80
+            - NODE_ENV=production
+        tty: true
